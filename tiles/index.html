@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tile maker · Continuous Skilljar sites</title>
+<meta name="description" content="Make course tiles for the Continuous Skilljar sites: pick a colour, type the title, download the image.">
+<link rel="icon" href="../assets/continuous-favicon.svg" type="image/svg+xml">
+<style>
+@font-face { font-family: "BDO Grotesk"; src: url(https://continuous.com/wp-content/themes/continuous/dist/assets/BDOGrotesk-Regular.woff2) format("woff2"); font-weight: 400; font-display: swap; }
+@font-face { font-family: "BDO Grotesk"; src: url(https://continuous.com/wp-content/themes/continuous/dist/assets/BDOGrotesk-Medium.woff2) format("woff2"); font-weight: 500; font-display: swap; }
+@font-face { font-family: "BDO Grotesk"; src: url(https://continuous.com/wp-content/themes/continuous/dist/assets/BDOGrotesk-DemiBold.woff2) format("woff2"); font-weight: 600; font-display: swap; }
+@font-face { font-family: "BDO Grotesk"; src: url(https://continuous.com/wp-content/themes/continuous/dist/assets/BDOGrotesk-Bold.woff2) format("woff2"); font-weight: 700; font-display: swap; }
+@font-face { font-family: "BDO Grotesk"; src: url(https://continuous.com/wp-content/themes/continuous/dist/assets/BDOGrotesk-ExtraBold.woff2) format("woff2"); font-weight: 800; font-display: swap; }
+:root { --blue: #0f4bbd; --blue-900: #0c3c97; --blue-50: #e3f1fd; --blue-100: #bcdefb; --sky: #90c8f8; --orange: #fa4716; --bone: #e9d9c3;
+  --navy: #01111f; --g700: #34414c; --g600: #677079; --g100: #cccfd2; --g10: #f4faff; --font: "BDO Grotesk", Inter, Arial, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: var(--font); color: var(--navy); background: var(--g10); font-size: 16px; line-height: 1.5; }
+::selection { background: var(--blue); color: #fff; }
+a { color: var(--blue); }
+.bar { background: var(--navy); color: #fff; }
+.bar__in { max-width: 1440px; margin: 0 auto; padding: 14px 28px; display: flex; align-items: center; gap: 20px; }
+.bar img { height: 26px; display: block; }
+.bar__title { font-weight: 500; font-size: 15px; color: #cfd8e3; border-left: 1px solid #34414c; padding-left: 20px; }
+.bar nav { margin-left: auto; font-size: 14px; }
+.bar nav a { color: #cfd8e3; text-decoration: none; }
+.bar nav a:hover { color: #fff; }
+
+.app { max-width: 1440px; margin: 0 auto; padding: 32px 28px 64px; display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: start; }
+.panel { background: #fff; border: 1px solid var(--g100); border-radius: 12px; padding: 24px; position: sticky; top: 24px; }
+.panel h1 { font-size: 26px; line-height: 1.15; margin: 0 0 4px; letter-spacing: -.01em; }
+.panel > p { margin: 0 0 20px; color: var(--g600); font-size: 14px; }
+.field { margin-bottom: 18px; }
+.field > label, .field > .lab { display: block; font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 6px; }
+.field small { display: block; color: var(--g600); font-size: 12px; margin-top: 5px; }
+input[type=text], textarea, select { width: 100%; font: 500 15px var(--font); color: var(--navy); background: #fff; border: 1px solid var(--g100); border-radius: 6px; padding: 9px 11px; }
+textarea { resize: vertical; min-height: 64px; line-height: 1.35; }
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--blue); outline-offset: 1px; border-color: var(--blue); }
+.swatches { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sw { position: relative; border: 2px solid var(--g100); border-radius: 10px; padding: 0; overflow: hidden; cursor: pointer; background: #fff; text-align: left; font: inherit; }
+.sw span.chipc { display: block; height: 44px; }
+.sw b { display: block; font-size: 14px; padding: 8px 10px 0; }
+.sw em { display: block; font-style: normal; font-size: 12px; color: var(--g600); padding: 0 10px 8px; }
+.sw[aria-pressed="true"] { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-50); }
+.sw:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.c-blue { background: linear-gradient(45deg, #01111f 14%, #0c3c97 70%, #0f4bbd 100%); }
+.c-beige { background: linear-gradient(45deg, #dcc6a6 0%, #e9d9c3 45%, #f6efe4 100%); }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.presets button { font: 600 12px var(--font); color: var(--blue-900); background: var(--blue-50); border: 1px solid var(--blue-100); border-radius: 99px; padding: 3px 10px; cursor: pointer; }
+.presets button:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.actions { display: grid; gap: 10px; margin-top: 22px; }
+.btn { font: 700 16px var(--font); border-radius: 6px; padding: 12px 16px; cursor: pointer; border: 0; text-align: center; }
+.btn--primary { background: var(--orange); color: #fff; font-size: 18px; }
+.btn--primary:hover { background: #d93d10; }
+.btn--ghost { background: #fff; color: var(--blue); border: 1px solid var(--blue-100); }
+.btn--ghost:hover { border-color: var(--blue); }
+.btn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.btn:disabled { opacity: .55; cursor: progress; }
+.status { font-size: 13px; color: var(--g600); min-height: 20px; margin: 4px 0 0; }
+
+.stage h2 { font-size: 14px; letter-spacing: .06em; text-transform: uppercase; color: var(--g600); margin: 0 0 10px; }
+.canvaswrap { background: #fff; border: 1px solid var(--g100); border-radius: 12px; padding: 14px; box-shadow: 0 8px 24px rgba(1,17,31,.06); }
+canvas#tile { width: 100%; height: auto; display: block; border-radius: 6px; }
+.incontext { margin-top: 28px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.card { background: #fff; border: 1px solid var(--g100); border-radius: 12px; overflow: hidden; }
+.card .img { position: relative; aspect-ratio: 16/9; }
+.card .img canvas, .card .img img { width: 100%; height: 100%; display: block; }
+.card .fmt { position: absolute; left: 10px; top: 10px; font-size: 10px; font-weight: 700; letter-spacing: .06em; background: #fff; color: var(--navy); border-radius: 99px; padding: 2px 8px; display: inline-flex; gap: 5px; align-items: center; }
+.card .fmt i { width: 6px; height: 6px; border-radius: 50%; background: var(--orange); }
+.card .body { padding: 12px 14px 16px; }
+.card .name { font-size: 15px; font-weight: 700; line-height: 1.25; }
+.card .meta { font-size: 12px; color: var(--g600); margin-top: 4px; }
+.card.ghost .img { background: repeating-linear-gradient(45deg, #eef2f6 0 10px, #f6f8fa 10px 20px); }
+.card.ghost .name, .card.ghost .meta { color: #b0b6bb; }
+
+details.batch { margin-top: 28px; background: #fff; border: 1px solid var(--g100); border-radius: 12px; padding: 18px 22px; }
+details.batch summary { font-weight: 700; cursor: pointer; font-size: 17px; }
+details.batch p { color: var(--g700); font-size: 14px; max-width: 760px; }
+details.batch textarea { font-family: ui-monospace, Consolas, monospace; font-size: 13px; min-height: 160px; }
+code { background: var(--blue-50); border-radius: 4px; padding: 0 4px; font-size: .92em; }
+
+@media (max-width: 980px) {
+  .app { grid-template-columns: 1fr; }
+  .panel { position: static; }
+  .incontext { grid-template-columns: 1fr 1fr; }
+  .incontext .ghost:last-child { display: none; }
+  .bar__title { display: none; }
+}
+</style>
+</head>
+<body>
+<header class="bar"><div class="bar__in">
+  <img src="../assets/continuous-horizontal-white-site.svg" alt="Continuous">
+  <span class="bar__title">Skilljar sites · Tile maker</span>
+  <nav><a href="../tagging/">Tagging guide</a></nav>
+</div></header>
+
+<div class="app">
+  <form class="panel" id="form" autocomplete="off">
+    <h1>Make a course tile</h1>
+    <p>Fill in the fields, then download. The image is 1280 × 720, ready to upload as the course image in Skilljar.</p>
+
+    <div class="field">
+      <span class="lab" id="lab-colour">Colour</span>
+      <div class="swatches" role="group" aria-labelledby="lab-colour">
+        <button type="button" class="sw" data-c="blue"><span class="chipc c-blue"></span><b>Blue</b><em>Products</em></button>
+        <button type="button" class="sw" data-c="beige"><span class="chipc c-beige"></span><b>Beige</b><em>Internal training</em></button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="label">Label</label>
+      <input type="text" id="label" name="label" maxlength="40">
+      <div class="presets" aria-label="Common labels">
+        <button type="button" data-label="OpCon" data-c="blue">OpCon</button>
+        <button type="button" data-label="Permission Assist" data-c="blue">Permission Assist</button>
+        <button type="button" data-label="Banking Expertise" data-c="beige">Banking Expertise</button>
+        <button type="button" data-label="Application Support" data-c="beige">Application Support</button>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="title">Title</label>
+      <textarea id="title" name="title" rows="2" maxlength="90"></textarea>
+      <small>Press Enter to choose where the line breaks. Long titles get smaller on their own.</small>
+    </div>
+
+    <div class="field">
+      <label for="sub">Subtitle <span style="font-weight:500;color:var(--g600)">(optional)</span></label>
+      <input type="text" id="sub" name="sub" maxlength="90">
+      <small>Usually the part of the course title after the colon.</small>
+    </div>
+
+    <div class="field">
+      <label for="chip">Corner tag <span style="font-weight:500;color:var(--g600)">(optional)</span></label>
+      <input type="text" id="chip" name="chip" maxlength="24" list="chips">
+      <datalist id="chips"><option value="Instructor-led"><option value="Sample"><option value="New"></datalist>
+      <small>Top right. The top left stays clear because the site puts LIVE / ON DEMAND there.</small>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="btn btn--primary" id="download">Download tile</button>
+      <button type="button" class="btn btn--ghost" id="copylink">Copy a link to this tile</button>
+    </div>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </form>
+
+  <section class="stage" aria-label="Preview">
+    <h2>Preview</h2>
+    <div class="canvaswrap"><canvas id="tile" width="1280" height="720" aria-label="Tile preview"></canvas></div>
+
+    <h2 style="margin-top:28px">In the catalog</h2>
+    <div class="incontext">
+      <div class="card"><div class="img"><img id="cardimg" alt=""><span class="fmt" id="cardfmt"><i></i>LIVE</span></div>
+        <div class="body"><div class="name" id="cardname"></div><div class="meta">How it sits on a catalog card</div></div></div>
+      <div class="card ghost"><div class="img"></div><div class="body"><div class="name">Another course</div><div class="meta">&nbsp;</div></div></div>
+      <div class="card ghost"><div class="img"></div><div class="body"><div class="name">Another course</div><div class="meta">&nbsp;</div></div></div>
+    </div>
+
+    <details class="batch">
+      <summary>Make many at once</summary>
+      <p>One tile per line: <code>colour, label, title, subtitle, corner tag</code>. Colour is <code>blue</code> or <code>beige</code>; use <code>|</code> in the title for a line break; leave a part empty with nothing between the commas. Each tile downloads as its own file, named from its title. Your browser may ask once to allow several downloads.</p>
+      <textarea id="batch" spellcheck="false" placeholder="blue, OpCon, OpCon Fundamentals, Build and Manage Automated Workflows, Instructor-led
+beige, Banking Expertise, Becoming Banking|Experts 101, Understanding How Banks Work,"></textarea>
+      <div class="actions" style="max-width:280px"><button type="button" class="btn btn--ghost" id="batchgo">Download all</button></div>
+    </details>
+  </section>
+</div>
+
+<script>
+(function () {
+  var W = 1280, H = 720;
+  var cv = document.getElementById('tile'), ctx = cv.getContext('2d');
+  var $ = function (id) { return document.getElementById(id); };
+  var state = { c: 'blue', label: 'OpCon', title: 'OpCon Fundamentals', sub: 'Build and Manage Automated Workflows', chip: '' };
+
+  /* images: the infinity pattern and the two logomarks, same origin as this page */
+  function load(src) { return new Promise(function (ok, bad) { var i = new Image(); i.onload = function () { ok(i); }; i.onerror = bad; i.src = src; }); }
+  var assets = Promise.all([load('../assets/infinity-pattern.svg'), load('../assets/continuous-logomark-white.svg'), load('../assets/continuous-logomark-blue.svg')]);
+  var fonts = Promise.all(['500', '600', '700', '800'].map(function (w) { return document.fonts.load(w + ' 40px "BDO Grotesk"'); })).catch(function () {});
+
+  /* a CSS-style angled linear gradient over the whole tile */
+  function linear(deg, stops) {
+    var a = deg * Math.PI / 180, dx = Math.sin(a), dy = -Math.cos(a);
+    var len = Math.abs(W * dx) + Math.abs(H * dy), cx = W / 2, cy = H / 2;
+    var g = ctx.createLinearGradient(cx - dx * len / 2, cy - dy * len / 2, cx + dx * len / 2, cy + dy * len / 2);
+    stops.forEach(function (s) { g.addColorStop(s[0], s[1]); });
+    return g;
+  }
+  /* a CSS-style "circle at x% y%" radial gradient, sized to the farthest corner */
+  function radial(px, py, stops) {
+    var x = W * px, y = H * py;
+    var r = Math.max(Math.hypot(x, y), Math.hypot(W - x, y), Math.hypot(x, H - y), Math.hypot(W - x, H - y));
+    var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    stops.forEach(function (s) { g.addColorStop(s[0], s[1]); });
+    return g;
+  }
+  var tinted = null;
+  function whitePattern(img) {
+    if (tinted) return tinted;
+    var c = document.createElement('canvas'); c.width = 1500; c.height = Math.round(1500 * img.naturalHeight / img.naturalWidth);
+    var x = c.getContext('2d'); x.drawImage(img, 0, 0, c.width, c.height);
+    x.globalCompositeOperation = 'source-in'; x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height);
+    return (tinted = c);
+  }
+
+  var LOOK = {
+    blue: { base: [45, [[.14, '#01111f'], [.70, '#0c3c97'], [1, '#0f4bbd']]],
+      glows: [[.80, .22, [[0, 'rgba(26,107,204,.75)'], [.52, 'rgba(15,75,189,0)']]], [.10, 1.10, [[0, 'rgba(144,200,248,.18)'], [.40, 'rgba(144,200,248,0)']]]],
+      pattern: { alpha: .16, shadow: [0, 30, 40, 'rgba(0,0,0,.45)'], white: false },
+      label: '#90c8f8', title: '#ffffff', sub: '#bcdefb', subWeight: 500, mark: 1,
+      chipBg: '#ffffff', chipFg: '#0c3c97' },
+    beige: { base: [45, [[0, '#dcc6a6'], [.45, '#e9d9c3'], [1, '#f6efe4']]],
+      glows: [[.80, .22, [[0, 'rgba(255,255,255,.75)'], [.52, 'rgba(255,255,255,0)']]], [.10, 1.10, [[0, 'rgba(176,136,86,.22)'], [.42, 'rgba(176,136,86,0)']]]],
+      pattern: { alpha: .55, shadow: [4, 6, 3, 'rgba(122,92,52,.30)'], white: true },
+      label: '#7a5c34', title: '#01111f', sub: '#0f4bbd', subWeight: 600, mark: 2,
+      chipBg: '#01111f', chipFg: '#ffffff' }
+  };
+
+  function font(weight, size, spacing) { ctx.font = weight + ' ' + size + 'px "BDO Grotesk", Inter, Arial, sans-serif'; if ('letterSpacing' in ctx) ctx.letterSpacing = (spacing || 0) + 'px'; }
+  function wrap(text, max) {
+    var out = [];
+    text.split('\n').forEach(function (para) {
+      var words = para.trim().split(/\s+/).filter(Boolean), line = '';
+      words.forEach(function (w) { var t = line ? line + ' ' + w : w; if (line && ctx.measureText(t).width > max) { out.push(line); line = w; } else line = t; });
+      if (line) out.push(line);
+    });
+    return out;
+  }
+  /* draws lines in CSS-like line boxes from top y; returns the height used */
+  function lines(list, x, y, lh) {
+    list.forEach(function (l, i) {
+      var m = ctx.measureText('Hg'), asc = m.fontBoundingBoxAscent || m.actualBoundingBoxAscent, desc = m.fontBoundingBoxDescent || m.actualBoundingBoxDescent;
+      ctx.fillText(l, x, y + i * lh + (lh - (asc + desc)) / 2 + asc);
+    });
+    return list.length * lh;
+  }
+
+  function draw(s, target) {
+    var c = target || ctx, L = LOOK[s.c] || LOOK.blue;
+    return assets.then(function (a) {
+      var saved = ctx; ctx = c;
+      ctx.save(); ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = linear(L.base[0], L.base[1]); ctx.fillRect(0, 0, W, H);
+      L.glows.forEach(function (g) { ctx.fillStyle = radial(g[0], g[1], g[2]); ctx.fillRect(0, 0, W, H); });
+      var pat = a[0], ph = 1500 * pat.naturalHeight / pat.naturalWidth;
+      ctx.save(); ctx.globalAlpha = L.pattern.alpha;
+      ctx.shadowOffsetX = L.pattern.shadow[0]; ctx.shadowOffsetY = L.pattern.shadow[1]; ctx.shadowBlur = L.pattern.shadow[2]; ctx.shadowColor = L.pattern.shadow[3];
+      ctx.drawImage(L.pattern.white ? whitePattern(pat) : pat, W + 560 - 1500, -170, 1500, ph);
+      ctx.restore();
+
+      /* measure the copy block, then lay it out up from the bottom (left 88, bottom 80) */
+      var X = 88, titleSize = 108, len = s.title.replace(/\|/g, '').length;
+      if (len > 34) titleSize = 92; if (len > 52) titleSize = 80;
+      font(800, titleSize, -titleSize * .025);
+      var tl = wrap(s.title.replace(/\|/g, '\n'), 1060), tlh = titleSize * .98;
+      font(L.subWeight, 40, 0);
+      var sl = s.sub ? wrap(s.sub, 920) : [], slh = 40 * 1.22;
+      var h = 7 + 30 + 34 + 26 + tl.length * tlh + (sl.length ? 22 + sl.length * slh : 0);
+      var y = H - 80 - h;
+
+      ctx.fillStyle = '#fa4716'; ctx.fillRect(X, y, 120, 7); y += 7 + 30;
+      var mk = a[L.mark], mw = 34 * mk.naturalWidth / mk.naturalHeight;
+      if (s.label) {
+        ctx.drawImage(mk, X, y, mw, 34);
+        font(700, 30, .6); ctx.fillStyle = L.label; lines([s.label], X + mw + 16, y - 3, 40);
+      } else {
+        ctx.drawImage(mk, X, y, mw, 34);
+      }
+      y += 34 + 26;
+      font(800, titleSize, -titleSize * .025); ctx.fillStyle = L.title; y += lines(tl, X - 3, y, tlh);
+      if (sl.length) { y += 22; font(L.subWeight, 40, 0); ctx.fillStyle = L.sub; lines(sl, X, y, slh); }
+
+      if (s.chip) {
+        font(700, 26, 0); var tw = ctx.measureText(s.chip).width, cw = 20 + 14 + 12 + tw + 24, ch = 26 * 1.5 + 24;
+        var cx = W - 72 - cw, cy = 64;
+        ctx.save(); ctx.shadowOffsetY = 14; ctx.shadowBlur = 26; ctx.shadowColor = 'rgba(1,17,31,.35)';
+        ctx.fillStyle = L.chipBg; ctx.beginPath(); ctx.roundRect ? ctx.roundRect(cx, cy, cw, ch, ch / 2) : ctx.rect(cx, cy, cw, ch); ctx.fill(); ctx.restore();
+        ctx.fillStyle = '#fa4716'; ctx.beginPath(); ctx.arc(cx + 20 + 7, cy + ch / 2, 7, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = L.chipFg; lines([s.chip], cx + 20 + 14 + 12, cy, ch);
+      }
+      ctx.restore();
+      ctx = saved;
+    });
+  }
+
+  /* form wiring */
+  function slug(t) { return (t || 'tile').toLowerCase().replace(/\|/g, ' ').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 70) || 'tile'; }
+  function readForm() { state.label = $('label').value.trim(); state.title = $('title').value.trim(); state.sub = $('sub').value.trim(); state.chip = $('chip').value.trim(); }
+  function writeForm() { $('label').value = state.label; $('title').value = state.title.replace(/\|/g, '\n'); $('sub').value = state.sub; $('chip').value = state.chip;
+    document.querySelectorAll('.sw').forEach(function (b) { b.setAttribute('aria-pressed', b.getAttribute('data-c') === state.c ? 'true' : 'false'); }); }
+  var pending = 0;
+  function render() {
+    var my = ++pending;
+    return fonts.then(function () { return draw(state); }).then(function () {
+      if (my !== pending) return;
+      try { $('cardimg').src = cv.toDataURL('image/png'); } catch (e) {}
+      $('cardname').textContent = state.title.replace(/\n|\|/g, ' ') + (state.sub ? ': ' + state.sub : '');
+    });
+  }
+  ['label', 'title', 'sub', 'chip'].forEach(function (id) { $(id).addEventListener('input', function () { readForm(); render(); }); });
+  document.querySelectorAll('.sw').forEach(function (b) { b.addEventListener('click', function () { state.c = b.getAttribute('data-c'); writeForm(); render(); }); });
+  document.querySelectorAll('.presets button').forEach(function (b) { b.addEventListener('click', function () { state.label = b.getAttribute('data-label'); state.c = b.getAttribute('data-c'); writeForm(); render(); }); });
+
+  function save(canvas, name) {
+    return new Promise(function (ok) {
+      canvas.toBlob(function (blob) {
+        var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name + '.png';
+        document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); ok(); }, 400);
+      }, 'image/png');
+    });
+  }
+  function say(t) { $('status').textContent = t; }
+  $('download').addEventListener('click', function () {
+    readForm(); render().then(function () { return save(cv, slug(state.title)); }).then(function () { say('Downloaded ' + slug(state.title) + '.png'); })
+      .catch(function () { say('Could not create the image. Open the tile maker from its web address, not a saved copy.'); });
+  });
+  $('copylink').addEventListener('click', function () {
+    readForm();
+    var q = new URLSearchParams({ c: state.c, label: state.label, title: state.title.replace(/\n/g, '|'), sub: state.sub, chip: state.chip });
+    var url = location.origin + location.pathname + '?' + q.toString();
+    (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function () { say('Link copied. Anyone with it sees this tile.'); }, function () { prompt('Copy this link:', url); });
+  });
+  $('batchgo').addEventListener('click', function () {
+    var rows = $('batch').value.split('\n').map(function (l) { return l.trim(); }).filter(Boolean);
+    if (!rows.length) { say('Add at least one line to make many at once.'); return; }
+    var off = document.createElement('canvas'); off.width = W; off.height = H; var octx = off.getContext('2d');
+    var btn = $('batchgo'); btn.disabled = true;
+    var i = 0, bad = 0;
+    (function next() {
+      if (i >= rows.length) { btn.disabled = false; say('Downloaded ' + (rows.length - bad) + ' tile' + (rows.length - bad === 1 ? '' : 's') + (bad ? '; ' + bad + ' line' + (bad === 1 ? '' : 's') + ' skipped (needs at least a colour and a title).' : '.')); return; }
+      var p = rows[i++].split(',').map(function (x) { return x.trim(); });
+      var s = { c: (p[0] || '').toLowerCase() === 'beige' ? 'beige' : 'blue', label: p[1] || '', title: p[2] || '', sub: p[3] || '', chip: p[4] || '' };
+      if (!s.title) { bad++; next(); return; }
+      say('Making tile ' + i + ' of ' + rows.length + '…');
+      fonts.then(function () { return draw(s, octx); }).then(function () { return save(off, slug(s.title)); }).then(next, function () { bad++; next(); });
+    })();
+  });
+
+  /* settings from the address (links made with "Copy a link") */
+  var q = new URLSearchParams(location.search);
+  ['c', 'label', 'title', 'sub', 'chip'].forEach(function (k) { if (q.has(k)) state[k] = q.get(k); });
+  if (state.c !== 'beige') state.c = 'blue';
+  writeForm(); render().then(function () {
+    if (q.has('selftest')) { try { cv.toDataURL('image/png'); document.title = 'SELFTEST OK'; } catch (e) { document.title = 'SELFTEST FAIL ' + e.name; } }
+  });
+})();
+</script>
+</body>
+</html>
