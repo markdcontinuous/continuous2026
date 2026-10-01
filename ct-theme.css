@@ -1261,6 +1261,8 @@ a.coursebox-container:focus { transform: none !important; }
   left: 12px;
   z-index: 1;
   display: flex;
+  flex-wrap: wrap;
+  max-width: calc(100% - 24px);
   gap: 6px;
   pointer-events: none;
 }
@@ -1274,7 +1276,7 @@ a.coursebox-container:focus { transform: none !important; }
   padding: 6px 10px;
   box-shadow: 0 1px 3px rgba(1, 17, 31, 0.25);
 }
-.ct-badge--new { background: var(--ct-orange); color: var(--ct-navy); }
+.ct-badge--new { background: var(--ct-orange-dark); color: var(--ct-white); }   /* darker orange: white text passes 4.5:1 */
 .ct-badge--popular { background: var(--ct-blue-800); color: var(--ct-white); }
 .ct-badge--featured { background: var(--ct-navy); color: var(--ct-white); }
 .ct-badge { border-radius: var(--ct-radius); }
@@ -1285,7 +1287,7 @@ a.coursebox-container:focus { transform: none !important; }
 .ct-badge--c-white { background: var(--ct-white); color: var(--ct-navy); }
 .ct-badge--c-navy { background: var(--ct-navy); color: var(--ct-white); }
 .ct-badge--c-blue { background: var(--ct-blue-800); color: var(--ct-white); }
-.ct-badge--c-orange { background: var(--ct-orange); color: var(--ct-navy); }
+.ct-badge--c-orange { background: var(--ct-orange-dark); color: var(--ct-white); }
 .ct-badge--c-bone { background: var(--ct-bone); color: var(--ct-navy); }
 .ct-badge--c-sky { background: var(--ct-blue-100); color: var(--ct-navy); }
 

@@ -220,8 +220,8 @@ try {
     track.setAttribute('aria-label', 'Featured courses, scroll sideways for more');
     track.tabIndex = 0;
     /* Labels on each Featured card: test:new, test:popular, and test:label:<word>
-       with an optional colour on the end (test:label:webinar-navy). A card with
-       none says Featured. They go in front of the card's format label, if any. */
+       with an optional colour on the end (test:label:webinar-navy). Every card says
+       Featured first. They go in front of the card's format label, if any. */
     picks.forEach(function (t) {
       var c = t.cloneNode(true);
       c.removeAttribute('id');
@@ -235,7 +235,7 @@ try {
         });
         labels.push(['c-' + colour, word]);
       });
-      if (!labels.length) labels.push(['featured', 'Featured']);
+      labels.unshift(['featured', 'Featured']);   /* every card in the row says Featured, then its labels */
       var area = c.querySelector('.coursebox-image') || c;
       var box = area.querySelector('.ct-badges');
       if (!box) { box = document.createElement('span'); box.className = 'ct-badges'; area.appendChild(box); }
