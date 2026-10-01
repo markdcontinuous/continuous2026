@@ -29,6 +29,11 @@ a { color: var(--blue); }
 .app { max-width: 1440px; margin: 0 auto; padding: 32px 28px 64px; display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: start; }
 .panel { background: #fff; border: 1px solid var(--g100); border-radius: 12px; padding: 24px; position: sticky; top: 24px; }
 .panel h1 { font-size: 26px; line-height: 1.15; margin: 0 0 4px; letter-spacing: -.01em; }
+.panel__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.newbtn { flex: none; display: inline-flex; align-items: center; gap: 6px; font: 700 14px var(--font); color: var(--blue); background: #fff; border: 1px solid var(--blue-100); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
+.newbtn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+.newbtn:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.newbtn svg { width: 14px; height: 14px; }
 .panel > p { margin: 0 0 20px; color: var(--g600); font-size: 14px; }
 .field { margin-bottom: 18px; }
 .field > label, .field > .lab { display: block; font-size: 13px; font-weight: 700; color: var(--g700); margin-bottom: 6px; }
@@ -97,7 +102,10 @@ code { background: var(--blue-50); border-radius: 4px; padding: 0 4px; font-size
 
 <div class="app">
   <form class="panel" id="form" autocomplete="off">
-    <h1>Make a course tile</h1>
+    <div class="panel__head">
+      <h1>Make a course tile</h1>
+      <button type="button" class="newbtn" id="new" title="Clear everything and start a new tile"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>New</button>
+    </div>
     <p>Fill in the fields, then download. The image is 1280 × 720, ready to upload as the course image in Skilljar.</p>
 
     <div class="field">
@@ -253,7 +261,8 @@ beige, Banking Expertise, Becoming Banking|Experts 101, Understanding How Banks 
       var X = 88, titleSize = 108, len = s.title.replace(/\|/g, '').length;
       if (len > 34) titleSize = 92; if (len > 52) titleSize = 80;
       font(800, titleSize, -titleSize * .025);
-      var tl = wrap(s.title.replace(/\|/g, '\n'), 1060), tlh = titleSize * .98;
+      /* an empty title shows a faint stand-in so the preview never looks broken; downloads are blocked */
+      var tl = s.title ? wrap(s.title.replace(/\|/g, '\n'), 1060) : ['Course title'], tlh = titleSize * .98;
       font(L.subWeight, 40, 0);
       var sl = s.sub ? wrap(s.sub, 920) : [], slh = 40 * 1.22;
       var h = 7 + 30 + 34 + 26 + tl.length * tlh + (sl.length ? 22 + sl.length * slh : 0);
@@ -268,7 +277,8 @@ beige, Banking Expertise, Becoming Banking|Experts 101, Understanding How Banks 
         ctx.drawImage(mk, X, y, mw, 34);
       }
       y += 34 + 26;
-      font(800, titleSize, -titleSize * .025); ctx.fillStyle = L.title; y += lines(tl, X - 3, y, tlh);
+      font(800, titleSize, -titleSize * .025); ctx.fillStyle = L.title;
+      ctx.save(); if (!s.title) ctx.globalAlpha = .28; y += lines(tl, X - 3, y, tlh); ctx.restore();
       if (sl.length) { y += 22; font(L.subWeight, 40, 0); ctx.fillStyle = L.sub; lines(sl, X, y, slh); }
 
       if (s.chip) {
@@ -312,6 +322,7 @@ beige, Banking Expertise, Becoming Banking|Experts 101, Understanding How Banks 
   }
   function say(t) { $('status').textContent = t; }
   $('download').addEventListener('click', function () {
+    readForm(); if (!state.title) { say('Add a title first.'); $('title').focus(); return; }
     readForm(); render().then(function () { return save(cv, slug(state.title)); }).then(function () { say('Downloaded ' + slug(state.title) + '.png'); })
       .catch(function () { say('Could not create the image. Open the tile maker from its web address, not a saved copy.'); });
   });
@@ -335,6 +346,14 @@ beige, Banking Expertise, Becoming Banking|Experts 101, Understanding How Banks 
       say('Making tile ' + i + ' of ' + rows.length + '…');
       fonts.then(function () { return draw(s, octx); }).then(function () { return save(off, slug(s.title)); }).then(next, function () { bad++; next(); });
     })();
+  });
+
+  /* New: clear every field, the batch list and the address, and start again */
+  $('new').addEventListener('click', function () {
+    state = { c: 'blue', label: '', title: '', sub: '', chip: '' };
+    $('batch').value = ''; say('');
+    if (history.replaceState) history.replaceState(null, '', location.pathname);
+    writeForm(); render(); $('title').focus();
   });
 
   /* settings from the address (links made with "Copy a link") */
