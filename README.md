@@ -10,3 +10,5 @@ Served by GitHub Pages at https://markdcontinuous.github.io/continuous2026/. **D
 Also published here: the **tagging guide** for the LMS team, https://markdcontinuous.github.io/continuous2026/tagging/ (built from `source/pages/tagging.html`).
 
 Also: the **tile maker** for course images, https://markdcontinuous.github.io/continuous2026/tiles/ (built from `source/pages/tiles.html`).
+
+Also: **VisualCron Academy** theme files in `visualcron/` (`vc-theme.css`, `vc-theme.js`), built by `tools/build.pl` in the VisualCron Skilljar Theme project.
