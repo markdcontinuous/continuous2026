@@ -20,9 +20,10 @@ body { margin: 0; font-family: var(--font); color: var(--navy); background: var(
 ::selection { background: var(--blue); color: #fff; }
 a { color: var(--blue); }
 
-.app { max-width: 1440px; margin: 0 auto; padding: 32px 28px 64px; display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: start; }
+.app { max-width: 1200px; margin: 0 auto; padding: 32px 24px 64px; display: grid; grid-template-columns: 380px minmax(0, 1fr); gap: 32px; align-items: start; }
 .panel { background: #fff; border: 1px solid var(--g100); border-radius: 12px; padding: 24px; position: sticky; top: 24px; }
-.panel h1 { font-size: 26px; line-height: 1.15; margin: 0 0 4px; letter-spacing: -.01em; }
+.hero__in { padding: 44px 24px 52px; }
+.panel h2 { font-size: 26px; line-height: 1.15; margin: 0 0 4px; letter-spacing: -.01em; }
 .panel__head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
 .newbtn { flex: none; display: inline-flex; align-items: center; gap: 6px; font: 700 14px var(--font); color: var(--blue); background: #fff; border: 1px solid var(--blue-100); border-radius: 6px; padding: 6px 12px; cursor: pointer; }
 .newbtn:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
@@ -88,14 +89,19 @@ code { background: var(--blue-50); border-radius: 4px; padding: 0 4px; font-size
 </head>
 <body>
 <header class="bar"><div class="bar__in"><a class="bar__brand" href="../"><img src="../assets/continuous-horizontal-white-site.svg" alt="Continuous"><span>LMS toolkit</span></a><nav aria-label="Toolkit"><a href="../">Home</a><a href="../tagging/">Tagging guide</a><a href="../tiles/" aria-current="page">Tile maker</a><a href="../playbook/">Uplift playbook</a><a href="../visualcron-academy/">VisualCron Academy</a></nav></div></header>
+<div class="hero"><div class="hero__in">
+  <span class="pill">Tile maker</span>
+  <h1>Make a course tile</h1>
+  <p class="hero__lead">Pick blue for products or beige for internal training, type the title, and download a 1280 × 720 image ready to upload as the course image in Skilljar.</p>
+</div></div>
 
 <div class="app">
   <form class="panel" id="form" autocomplete="off">
     <div class="panel__head">
-      <h1>Make a course tile</h1>
+      <h2>Your tile</h2>
       <button type="button" class="newbtn" id="new" title="Clear everything and start a new tile"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M8 3v10M3 8h10"/></svg>New</button>
     </div>
-    <p>Fill in the fields, then download. The image is 1280 × 720, ready to upload as the course image in Skilljar.</p>
+    <p>Fill in the fields; the preview updates as you type.</p>
 
     <div class="field">
       <span class="lab" id="lab-colour">Colour</span>
