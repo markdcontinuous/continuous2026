@@ -12,3 +12,5 @@ Also published here: the **tagging guide** for the LMS team, https://markdcontin
 Also: the **tile maker** for course images, https://markdcontinuous.github.io/continuous2026/tiles/ (built from `source/pages/tiles.html`).
 
 Also: **VisualCron Academy** theme files in `visualcron/` (`vc-theme.css`, `vc-theme.js`), built by `tools/build.pl` in the VisualCron Skilljar Theme project.
+
+Also: **Continuous Learning** (learning.continuous.com) theme files in `learning/` (`ct-learning.css`, `ct-learning.js`), built by `tools/build.pl` in the Continuous Learning Skilljar Theme project. Separate from the Growth files above; the test site can preview them with `?site=learning`.
