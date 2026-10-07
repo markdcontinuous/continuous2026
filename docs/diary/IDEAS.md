@@ -25,7 +25,7 @@ Running list across all days. Newest at the top of each project. Status: open, b
 
 | Idea | From | Status | Notes |
 |---|---|---|---|
-| Control panel so routine changes need no code | 2026-10-05 | done | https://continuous-lms.github.io/learning/panel/ . Banners dropped on 6 Oct (not ours). |
+| Control panel so routine changes need no code | 2026-10-05 | done | Was at continuous-lms.github.io/learning/panel/; removed 8 Oct with the organisation (Learning moved to the company GitHub). Banners dropped on 6 Oct (not ours). |
 | Separate test copy of the design files, so changes are tried on the test site before Learning | 2026-10-06 | open | Needed before Mark pastes Learning; agreed in principle. |
 | Rename the Featured/New tag word from `growth` to `learning` | 2026-10-06 | open | No Learning course has these tags yet, so it is free to change. |
 | Edit `courseTags` in the control panel | 2026-10-06 | open | Today only in learning/settings.js. |
