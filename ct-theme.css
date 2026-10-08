@@ -1630,3 +1630,9 @@ a.coursebox-container .coursebox-text { color: var(--lh-ink) !important; }
   .ct-hero { padding-top: 16px; padding-bottom: 24px; }
   .ct-hero__inner { padding: 28px 22px; border-radius: 10px; }
 }
+
+/* The header menu code is pasted twice on the test site (an old box still carries a copy, 9 Oct), which built
+   two menus. Only the first copy of the menu, the phone menu button and the phone menu panel shows. */
+#header #header-right .header-link-container ~ .header-link-container,
+#header #header-right .header-mobile-menu ~ .header-mobile-menu,
+.header-mobile-dropdown ~ .header-mobile-dropdown { display: none !important; }

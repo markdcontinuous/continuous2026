@@ -566,3 +566,22 @@ try {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
 })();
 } catch (e) { if (window.console) console.error('ct-theme', e); }
+try {
+/* The header menu code is pasted twice on the test site (an old Skilljar box still carries a copy, 9 Oct):
+   two menus, and the phone menu button toggled twice per tap, so it never opened. Once the page is ready,
+   keep the first menu, phone button and phone panel, remove the copies, and leave one click on the button.
+   Does nothing when there is only one copy. */
+(function () {
+  if (!window.jQuery) return;
+  jQuery(function ($) {
+    setTimeout(function () {
+      var btns = $('#header-right .header-mobile-menu');
+      if (btns.length < 2 && $('#header-right .header-link-container').length < 2) return;
+      $('#header-right .header-link-container').slice(1).remove();
+      btns.slice(1).remove();
+      $('.header-mobile-dropdown').slice(1).remove();
+      $('#header-right .header-mobile-menu').off('click').on('click', function () { $('body').toggleClass('mobile-menu-open'); });
+    }, 0);
+  });
+})();
+} catch (e) { if (window.console) console.error('ct-theme', e); }
