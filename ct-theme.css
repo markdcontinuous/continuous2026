@@ -1568,3 +1568,65 @@ body.ct-view #catalog-content { padding-top: 0; }
   .ct-steps > a .coursebox-image img { aspect-ratio: auto; object-fit: contain !important; }
   .ct-step-label, .ct-steps > a .coursebox-text, .ct-steps > a .coursebox-text-description, .ct-steps > a .course-overview { grid-column: 1; grid-row: auto; }
 }
+/* --------------------------------------------------------------------------
+   19. Lighthouse look (Merly, 9 Oct 2026: "for growth build out, use this for theme and color")
+   Colours sampled from her screenshot of Lighthouse (lighthouse.continuous.com): cream page and
+   panels with a thin peach outline, dark navy-to-blue gradients for the banner and tiles, white
+   cards with a blue top line, navy headings. Everything above stays; this section overrides it.
+   -------------------------------------------------------------------------- */
+:root {
+  --lh-page: #fcf8f2;        /* page */
+  --lh-panel: #f8f1e7;       /* cream panels */
+  --lh-outline: #f4dabe;     /* thin peach outline */
+  --lh-navy: #0c2a6e;        /* headings, wordmark navy */
+  --lh-ink: #253345;         /* body text */
+  --lh-blue: #1748c8;        /* card top lines, links */
+  --lh-grad-dark: linear-gradient(100deg, #071221 0%, #0b1e3e 45%, #0a2968 100%);
+  --lh-grad-mid: linear-gradient(90deg, #0c2a6f 0%, #123a8e 100%);
+  --lh-grad-bright: linear-gradient(90deg, #1e4fd8 0%, #5a8cee 100%);
+  --ct-gray-10: var(--lh-page);
+  --ct-blue-800: var(--lh-blue);
+}
+body, #skilljar-content, body.sj-page-catalog #skilljar-content { background: var(--lh-page) !important; }
+h1, h2, h3, .ct-section__title, .ct-start__title, .ct-roles__title, .ct-subhero__title { color: var(--lh-navy); }
+
+/* Header banner: Lighthouse's dark navy card */
+.ct-hero { background: transparent !important; padding-top: 32px; padding-bottom: 40px; }
+.ct-hero__inner { background: var(--lh-grad-dark); border-radius: 14px; box-shadow: 0 12px 32px rgba(7, 18, 33, 0.22); padding: 48px 56px; box-sizing: border-box; }
+.ct-hero__eyebrow { background: transparent !important; color: #c9d6ee !important; letter-spacing: 0.18em; padding: 0 !important; border: 0 !important; }
+.ct-hero__title, .ct-hero__title .ct-accent { color: var(--ct-white) !important; }
+.ct-hero__lead { color: #d6e0f0 !important; }
+.ct-hero__link { color: var(--ct-white) !important; }
+.ct-hero__link:hover, .ct-hero__link:focus { color: #c9d6ee !important; }
+.ct-hero__media { background: rgba(255, 255, 255, 0.06) !important; border: 1px solid rgba(255, 255, 255, 0.16) !important; border-radius: 12px; }
+.ct-hero__media img { filter: brightness(0) invert(1); }
+
+/* Buttons: the bright Lighthouse blue */
+.ct-btn--primary, a.ct-btn--primary { background: var(--lh-grad-bright) !important; border-color: transparent !important; color: var(--ct-white) !important; }
+.ct-btn--primary:hover, a.ct-btn--primary:hover, .ct-btn--primary:focus-visible { background: var(--lh-grad-mid) !important; }
+
+/* Course cards: white, blue top line, soft shadow */
+a.coursebox-container { background: var(--ct-white) !important; border: 0 !important; border-top: 3px solid var(--lh-blue) !important; border-radius: 6px !important; box-shadow: 0 2px 10px rgba(12, 42, 110, 0.10) !important; }
+a.coursebox-container:hover, a.coursebox-container:focus-visible { box-shadow: 0 10px 24px rgba(12, 42, 110, 0.18) !important; }
+a.coursebox-container .coursebox-text { color: var(--lh-ink) !important; }
+
+/* Bands and panels: cream with the thin peach outline */
+.ct-featured, .ct-start, .ct-roles { background: var(--lh-panel) !important; border-top: 1px solid var(--lh-outline); border-bottom: 1px solid var(--lh-outline); }
+.ct-featured .ct-section__head::before { background: var(--lh-blue) !important; }
+.ct-subhero { background: var(--lh-grad-dark) !important; }
+.ct-subhero__title, .ct-subhero__lead, .ct-subhero__crumbs, .ct-subhero__crumbs a { color: var(--ct-white) !important; }
+
+/* Role and topic tiles: the dark Lighthouse tiles (Lending, Compliance...) */
+.ct-role { background: var(--lh-grad-dark) !important; border: 0 !important; border-radius: 8px !important; color: var(--ct-white) !important; }
+.ct-role .ct-role__name, .ct-role .ct-role__text, .ct-role .ct-role__count { color: var(--ct-white) !important; }
+.ct-role:hover, .ct-role:focus-visible { background: var(--lh-grad-mid) !important; }
+
+/* Section links */
+.ct-section__all { color: var(--lh-blue) !important; }
+
+/* Footer: the dark banner gradient */
+.ct-footer { background: var(--lh-grad-dark) !important; }
+@media only screen and (max-width: 767px) {
+  .ct-hero { padding-top: 16px; padding-bottom: 24px; }
+  .ct-hero__inner { padding: 28px 22px; border-radius: 10px; }
+}
