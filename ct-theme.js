@@ -15,17 +15,21 @@ try {
 })();
 } catch (e) { if (window.console) console.error('ct-theme', e); }
 });
-ctReady(function () {
 try {
 /* Site settings. Each site keeps its own settings in a hidden block in its
    Custom Footer HTML (<div class="ct-settings">): the site name used in tags,
    topics, roles, formats, and the temporary fallback lists. This reads them on
    every page, so the code is identical on test, Growth and Learn, and builds
    the header menu from them. Without the block, the site stays on Skilljar's
-   own layout. Format of each line: see SETTINGS in the footer file. */
-(function () {
+   own layout. Format of each line: see SETTINGS in the footer file.
+   Loaded on demand: Skilljar's header menu code calls this when the page is
+   ready, before this file's own page-ready steps, so the menu gets the topics
+   too (9 Oct). ct:now = the build runs this block straight away. */
+/* ct:now */
+window.ctLoadSettings = function () {
+  if (window.CT) return window.CT;
   var box = document.querySelector('.ct-settings');
-  if (!box) return;
+  if (!box) return null;
   function rows(name) {
     var el = box.querySelector('[data-set="' + name + '"]');
     if (!el) return [];
@@ -62,9 +66,10 @@ try {
   CT.topics.forEach(function (t) { nested[t.title] = { href: '/#subject-' + t.key, target: '_self' }; });
   CT.formats.forEach(function (f) { if (f.menu) nested[f.title] = { href: '/#format-' + f.key, target: '_self' }; });
   window.CT_MENU = { 'Home': { href: '/', target: '_self' }, 'Learning Catalogs': { nestedLinks: nested } };
-})();
+  return CT;
+};
+ctReady(window.ctLoadSettings);
 } catch (e) { if (window.console) console.error('ct-theme', e); }
-});
 ctReady(function () {
 try {
 /* Continuous Skilljar template: catalog page behaviour (catalog pages only).
@@ -76,7 +81,7 @@ try {
   if (!document.body.classList.contains('sj-page-catalog')) return;
 
   /* Everything site-specific comes from the site settings (see above). */
-  var CT = window.CT;
+  var CT = window.ctLoadSettings && window.ctLoadSettings();
   if (!CT) return;
   /* With a site word (test), tags follow site:kind:value (test:topic:opcon).
      With no site word (Growth), the site reads its own Skilljar tags as they
