@@ -16,6 +16,28 @@ try {
 } catch (e) { if (window.console) console.error('ct-theme', e); }
 });
 try {
+/* ct:now */
+/* Course images on copied tiles (10 Oct, the fix Learning got on 7 Oct). Skilljar shows a blank
+   placeholder and keeps the real image in data-src until its own loader swaps it in, but only on
+   its own tiles. The design copies tiles (Featured, place to start, All courses, topic and team
+   views), so it puts the real image in itself, on every tile already on the page and on every
+   tile added later. */
+(function () {
+  function fix(root) {
+    if (!root || !root.querySelectorAll) return;
+    var imgs = root.matches && root.matches('img[data-src]') ? [root] : root.querySelectorAll('img[data-src]');
+    Array.prototype.forEach.call(imgs, function (im) {
+      var real = (im.getAttribute('data-src') || '').trim(), now = (im.getAttribute('src') || '').trim();
+      if (real && now !== real && (!now || /transparent|data:image\/gif/.test(now))) im.setAttribute('src', real);
+    });
+  }
+  fix(document);
+  if (window.MutationObserver) new MutationObserver(function (list) {
+    list.forEach(function (m) { Array.prototype.forEach.call(m.addedNodes, function (n) { if (n.nodeType === 1) fix(n); }); });
+  }).observe(document.documentElement, { childList: true, subtree: true });
+})();
+} catch (e) { if (window.console) console.error('ct-theme', e); }
+try {
 /* Site settings. Each site keeps its own settings in a hidden block in its
    Custom Footer HTML (<div class="ct-settings">): the site name used in tags,
    topics, roles, formats, and the temporary fallback lists. This reads them on
