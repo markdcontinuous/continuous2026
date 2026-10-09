@@ -1,4 +1,6 @@
 /* Continuous Skilljar theme. Built from source/global-code-snippet.html by tools/build.pl; do not edit here. */
+function ctReady(f) { if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', f); else f(); }
+ctReady(function () {
 try {
 /* Footer logo: the white Continuous logo from continuous.com. The footer HTML
    carries an empty placeholder and this fills it in on every page. */
@@ -12,6 +14,8 @@ try {
   slot.appendChild(im);
 })();
 } catch (e) { if (window.console) console.error('ct-theme', e); }
+});
+ctReady(function () {
 try {
 /* Site settings. Each site keeps its own settings in a hidden block in its
    Custom Footer HTML (<div class="ct-settings">): the site name used in tags,
@@ -32,9 +36,15 @@ try {
   var site = box.querySelector('[data-set="site"]');
   var CT = {
     site: site ? site.textContent.toLowerCase().replace(/[^a-z0-9]/g, '') : '',
-    topics: [], roles: [], formats: [],
+    topics: [], roles: [], formats: [], levels: [],
     fallback: { topic: {}, role: {}, format: {}, start: [] }
   };
+  /* Optional wording for the home page's role cards */
+  ['roles-title', 'roles-lead'].forEach(function (n) {
+    var e = box.querySelector('[data-set="' + n + '"]');
+    if (e && e.textContent.trim()) CT[n === 'roles-title' ? 'rolesTitle' : 'rolesLead'] = e.textContent.trim();
+  });
+  rows('levels').forEach(function (p) { if (p[0]) CT.levels.push({ key: p[0], label: p[1] || p[0] }); });
   rows('topics').forEach(function (p) { if (p[0]) CT.topics.push({ key: p[0], icon: p[1] || 'document', title: p[2] || p[0], lead: p[3] || '' }); });
   rows('roles').forEach(function (p) { if (p[0]) CT.roles.push({ key: p[0], icon: p[1] || 'document', title: p[2] || p[0], courses: [] }); });
   rows('formats').forEach(function (p) { if (p[0]) CT.formats.push({ key: p[0], label: p[1] || p[0], title: p[2] || p[0], lead: p[3] || '', menu: /^y/i.test(p[4] || '') }); });
@@ -54,6 +64,8 @@ try {
   window.CT_MENU = { 'Home': { href: '/', target: '_self' }, 'Learning Catalogs': { nestedLinks: nested } };
 })();
 } catch (e) { if (window.console) console.error('ct-theme', e); }
+});
+ctReady(function () {
 try {
 /* Continuous Skilljar template: catalog page behaviour (catalog pages only).
    Builds the home page front door (Featured, roles, place to start) and the
@@ -65,8 +77,14 @@ try {
 
   /* Everything site-specific comes from the site settings (see above). */
   var CT = window.CT;
-  if (!CT || !CT.site) return;
+  if (!CT) return;
+  /* With a site word (test), tags follow site:kind:value (test:topic:opcon).
+     With no site word (Growth), the site reads its own Skilljar tags as they
+     are: beginner, on-demand, operations-staff, featured. Topics then come from
+     the fallback lists only. */
   var TAG = CT.site;
+  var PLAIN = !TAG;
+  var LEVELS = CT.levels;
   var FORMATS = CT.formats;
   var BUILT_IN_FORMATS = CT.fallback.format;
   var SECTIONS = CT.topics;
@@ -110,8 +128,9 @@ try {
     var t = SECTIONS.concat([FALLBACK_SECTION]).filter(function (s) { return s.key === k; })[0];
     return ICONS[(t && t.icon) || 'document'] || ICONS.document;
   }
+  /* Split on commas only: a tag name can hold a space (Operations Staff) */
   function tagsOf(tile) {
-    return (tile.getAttribute('data-tags') || '').toLowerCase().split(/[,\s]+/).map(function (t) { return t.trim(); }).filter(Boolean);
+    return (tile.getAttribute('data-tags') || '').toLowerCase().split(/,/).map(function (t) { return t.trim(); }).filter(Boolean);
   }
   function slugOf(tile) { return tile.getAttribute('data-course') || tile.getAttribute('data-path') || ''; }
   /* Tags as they arrive on the page: lower case, punctuation removed */
@@ -122,8 +141,21 @@ try {
     var p = TAG + kind;
     return flatTags(tile).filter(function (x) { return x.indexOf(p) === 0 && x.length > p.length; }).map(function (x) { return x.slice(p.length); });
   }
+  /* The tag for a setting's key: test:role:support on test, operationsstaff on Growth */
+  function tagOf(kind, key) { return PLAIN ? key : TAG + kind + key; }
+  /* Keys from a settings list that this tile is tagged with */
+  function keysOf(tile, kind, list) {
+    var f = flatTags(tile);
+    return list.filter(function (x) { return f.indexOf(tagOf(kind, x.key)) >= 0; }).map(function (x) { return x.key; });
+  }
+  function levelsOf(tile) { return keysOf(tile, 'level', LEVELS); }
+  /* "Beginner", or "Intermediate to Advanced" for a course with two levels */
+  function levelText(keys) {
+    var names = LEVELS.filter(function (l) { return keys.indexOf(l.key) >= 0; }).map(function (l) { return l.label; });
+    return names.length > 1 ? names[0] + ' to ' + names[names.length - 1] : (names[0] || '');
+  }
   function formatOf(tile) {
-    var own = valuesOf(tile, 'format').filter(function (v) { return FORMATS.some(function (f) { return f.key === v; }); })[0];
+    var own = keysOf(tile, 'format', FORMATS)[0];
     if (own) return own;
     var slug = slugOf(tile);
     for (var k in BUILT_IN_FORMATS) { if (BUILT_IN_FORMATS[k].indexOf(slug) >= 0) return k; }
@@ -139,7 +171,7 @@ try {
     for (var k in BUILT_IN_SECTIONS) { if (BUILT_IN_SECTIONS[k].indexOf(slug) >= 0) return k; }
     return null;
   }
-  function sectionTagOf(tile) { return valuesOf(tile, 'topic')[0] || null; }
+  function sectionTagOf(tile) { return PLAIN ? null : (valuesOf(tile, 'topic')[0] || null); }
 
   /* 2 and 3: card treatment and icon for tiles without an image */
   tiles.forEach(function (tile) {
@@ -165,15 +197,25 @@ try {
     /* Format label on every card (test:format:live / ondemand) */
     var fmt = formatOf(tile);
     var fdef = FORMATS.filter(function (f) { return f.key === fmt; })[0];
-    if (fdef) {
-      tile.setAttribute('data-ct-format', fdef.key);
+    /* Level label (beginner, intermediate, advanced) after the format */
+    var lv = levelText(levelsOf(tile));
+    if (fdef || lv) {
       var farea = tile.querySelector('.coursebox-image') || tile;
       var fbox = document.createElement('span');
       fbox.className = 'ct-badges';
-      var fb = document.createElement('span');
-      fb.className = 'ct-badge ct-badge--format ct-badge--format-' + fdef.key;
-      fb.textContent = fdef.label;
-      fbox.appendChild(fb);
+      if (fdef) {
+        tile.setAttribute('data-ct-format', fdef.key);
+        var fb = document.createElement('span');
+        fb.className = 'ct-badge ct-badge--format ct-badge--format-' + fdef.key;
+        fb.textContent = fdef.label;
+        fbox.appendChild(fb);
+      }
+      if (lv) {
+        var lb = document.createElement('span');
+        lb.className = 'ct-badge ct-badge--level';
+        lb.textContent = lv;
+        fbox.appendChild(lb);
+      }
       farea.appendChild(fbox);
     }
   });
@@ -226,7 +268,7 @@ try {
       var c = t.cloneNode(true);
       c.removeAttribute('id');
       var labels = [];
-      if (hasTag(t, 'new')) labels.push(['new', 'New']);
+      if (hasTag(t, 'new') || (PLAIN && hasTag(t, 'whatsnew'))) labels.push(['new', 'New']);
       if (hasTag(t, 'popular')) labels.push(['popular', 'Popular']);
       valuesOf(t, 'label').forEach(function (word) {
         var colour = 'white';
@@ -321,7 +363,6 @@ try {
   tiles.forEach(function (t) { bySlug[slugOf(t)] = t; });
   function flat(t) { return tagsOf(t).map(function (x) { return x.replace(/[^a-z0-9]/g, ''); }); }
   function tagged(tag) { return tiles.filter(function (t) { return flat(t).indexOf(tag) >= 0; }); }
-  function anyTagged(prefix) { return tiles.some(function (t) { return flat(t).some(function (x) { return x.indexOf(prefix) === 0; }); }); }
   function pick(slugs) { return slugs.map(function (s) { return bySlug[s]; }).filter(Boolean); }
   function inSection(key) {
     var known = SECTIONS.some(function (s) { return s.key === key; });
@@ -334,13 +375,16 @@ try {
   }
   /* A role lists every item tagged test:role:<key>, plus the built-in picks that
      carry no role tag of their own (for example a path that cannot be tagged). */
-  function hasRoleTag(t) { return flat(t).some(function (x) { return x.indexOf(TAG + 'role') === 0; }); }
+  function hasRoleTag(t) {
+    if (PLAIN) return keysOf(t, 'role', ROLES).length > 0;
+    return flat(t).some(function (x) { return x.indexOf(TAG + 'role') === 0; });
+  }
   function roleCourses(r) {
-    var list = tagged(TAG + 'role' + r.key);
+    var list = tagged(tagOf('role', r.key));
     pick(r.courses).forEach(function (t) { if (!hasRoleTag(t) && list.indexOf(t) < 0) list.push(t); });
     return list;
   }
-  var essentials = (anyTagged(TAG + 'start') ? tagged(TAG + 'start') : pick(ESSENTIALS)).slice(0, 3);
+  var essentials = (tagged(TAG + 'start').length ? tagged(TAG + 'start') : pick(ESSENTIALS)).slice(0, 3);
 
   function clone(t) { var c = t.cloneNode(true); c.removeAttribute('id'); return c; }
   function el(tag, cls, text) {
@@ -392,7 +436,7 @@ try {
     if (fm) view = { icon: '_other', title: fm.title, lead: fm.lead, list: tiles.filter(function (t) { return formatOf(t) === fm.key; }) };
   } else if (m) {
     var role = ROLES.filter(function (r) { return r.key === m[3]; })[0];
-    if (role) view = { icon: role.icon, title: role.title, lead: 'Courses picked for this role.', list: roleCourses(role) };
+    if (role) view = { icon: role.icon, title: role.title, lead: PLAIN ? 'Courses for ' + role.title + '.' : 'Courses picked for this role.', list: roleCourses(role), role: role.key };
   }
   window.addEventListener('hashchange', function () {
     if (/^#(all|subject-|role-|format-)/.test(window.location.hash) || document.body.classList.contains('ct-view')) window.location.reload();
@@ -452,9 +496,74 @@ try {
     } else {
       body.appendChild(gridOf(view.list));
     }
+    var bar = filterBar(body, view);
+    if (bar) body.insertBefore(bar, body.firstChild);
     host.insertBefore(body, host.firstChild);
     host.insertBefore(head, host.firstChild);
     return;
+  }
+
+  /* Filters above a course list: Team and Level, from the tags on the courses
+     shown. A menu only appears when it has at least two choices. Rows with no
+     course left are hidden; a line says so when nothing matches. */
+  function filterBar(body, view) {
+    var cards = Array.prototype.slice.call(body.querySelectorAll('a.coursebox-container'));
+    var menus = [];
+    function choices(kind, list, skip) {
+      return list.filter(function (x) {
+        return x.key !== skip && cards.some(function (c) { return keysOf(c, kind, [x]).length; });
+      });
+    }
+    var teams = choices('role', ROLES, view.role);
+    var levels = choices('level', LEVELS);
+    if (teams.length > 1) menus.push({ kind: 'role', label: PLAIN ? 'Team' : 'Role', all: PLAIN ? 'All teams' : 'All roles', list: teams });
+    if (levels.length > 1) menus.push({ kind: 'level', label: 'Level', all: 'All levels', list: levels });
+    if (!menus.length) return null;
+    var bar = el('div', 'ct-filters');
+    bar.setAttribute('role', 'search');
+    bar.setAttribute('aria-label', 'Filter courses');
+    var none = el('p', 'ct-filters__none', 'No courses match. Try another team or level.');
+    none.hidden = true;
+    var status = el('p', 'ct-filters__status');
+    status.setAttribute('aria-live', 'polite');
+    var picks = {};
+    function apply() {
+      var shown = 0;
+      cards.forEach(function (c) {
+        var ok = menus.every(function (mn) { return !picks[mn.kind] || keysOf(c, mn.kind, [{ key: picks[mn.kind] }]).length; });
+        c.hidden = !ok;
+        c.style.display = ok ? '' : 'none';
+        if (ok) shown++;
+      });
+      Array.prototype.forEach.call(body.querySelectorAll('.ct-section'), function (s) {
+        var any = Array.prototype.some.call(s.querySelectorAll('a.coursebox-container'), function (c) { return !c.hidden; });
+        s.style.display = any ? '' : 'none';
+      });
+      none.hidden = shown > 0;
+      var on = menus.some(function (mn) { return picks[mn.kind]; });
+      status.textContent = on ? 'Showing ' + plural(shown) + ' of ' + cards.length + '.' : '';
+    }
+    menus.forEach(function (mn) {
+      var lab = el('label', 'ct-filters__field');
+      lab.appendChild(el('span', 'ct-filters__label', mn.label));
+      var sel = el('select', 'ct-filters__select');
+      var o = el('option', '', mn.all);
+      o.value = '';
+      sel.appendChild(o);
+      mn.list.forEach(function (x) {
+        var op = el('option', '', x.title || x.label);
+        op.value = x.key;
+        sel.appendChild(op);
+      });
+      sel.addEventListener('change', function () { picks[mn.kind] = sel.value; apply(); });
+      lab.appendChild(sel);
+      bar.appendChild(lab);
+    });
+    bar.appendChild(status);
+    var wrap = el('div', 'ct-filters__wrap');
+    wrap.appendChild(bar);
+    wrap.appendChild(none);
+    return wrap;
   }
 
   document.body.classList.add('ct-home-on');
@@ -463,12 +572,12 @@ try {
   /* Find training for your role (first, above the place to start: Merly, 26 Sept) */
   var roles = ROLES.filter(function (r) { return roleCourses(r).length; });
   if (roles.length) {
-    var rs = el('section', 'ct-roles');
+    var rs = el('section', 'ct-roles' + (roles.length > 6 ? ' ct-roles--many' : ''));
     rs.setAttribute('aria-labelledby', 'ct-roles-title');
-    var rh = el('h2', 'ct-roles__title', 'Find training for your role');
+    var rh = el('h2', 'ct-roles__title', CT.rolesTitle || 'Find training for your role');
     rh.id = 'ct-roles-title';
     rs.appendChild(rh);
-    rs.appendChild(el('p', 'ct-roles__lead', 'Pick the one that sounds most like you.'));
+    rs.appendChild(el('p', 'ct-roles__lead', CT.rolesLead || 'Pick the one that sounds most like you.'));
     var rl = el('div', 'ct-roles__list');
     roles.forEach(function (r) {
       var a = el('a', 'ct-role');
@@ -517,6 +626,8 @@ try {
   if (browse) browse.setAttribute('href', '#all');
 })();
 } catch (e) { if (window.console) console.error('ct-theme', e); }
+});
+ctReady(function () {
 try {
 /* Learning path pages: a LEARNING PATH label and course count by the title, a short guide
    above the courses, and "Step n of N" on each course. Completed courses get a tick. */
@@ -566,6 +677,8 @@ try {
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', run); else run();
 })();
 } catch (e) { if (window.console) console.error('ct-theme', e); }
+});
+ctReady(function () {
 try {
 /* The header menu code is pasted twice on the test site (an old Skilljar box still carries a copy, 9 Oct):
    two menus, and the phone menu button toggled twice per tap, so it never opened. Once the page is ready,
@@ -585,3 +698,4 @@ try {
   });
 })();
 } catch (e) { if (window.console) console.error('ct-theme', e); }
+});

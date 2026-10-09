@@ -1636,3 +1636,31 @@ a.coursebox-container .coursebox-text { color: var(--lh-ink) !important; }
 #header #header-right .header-link-container ~ .header-link-container,
 #header #header-right .header-mobile-menu ~ .header-mobile-menu,
 .header-mobile-dropdown ~ .header-mobile-dropdown { display: none !important; }
+
+/* --------------------------------------------------------------------------
+   20. Growth's own tags (Mark, 9 Oct 2026): level label on every card, team cards on the
+   home page, Team and Level filters above course lists.
+   -------------------------------------------------------------------------- */
+.ct-badge--level { background: var(--ct-white); color: var(--lh-navy); }
+
+/* Many team cards (Growth has 18): a tighter grid, no icon, name and count only */
+.ct-roles--many .ct-roles__list { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.ct-roles--many .ct-role { padding: 14px 18px; gap: 0; }
+.ct-roles--many .ct-role .ct-icon { display: none; }
+.ct-roles--many .ct-role__name { font-size: 15px; }
+.ct-roles--many .ct-role__count { font-size: 13px; color: #c9d6ee !important; }
+@media only screen and (max-width: 1000px) { .ct-roles--many .ct-roles__list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media only screen and (max-width: 640px) { .ct-roles--many .ct-roles__list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+/* Filters above a course list */
+.ct-filters__wrap { padding: 28px 0 4px; }
+.ct-filters { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 16px 20px; padding: 16px 20px; background: var(--lh-panel); border: 1px solid var(--lh-outline); border-radius: 8px; }
+.ct-filters__field { display: flex; flex-direction: column; gap: 6px; margin: 0; font-weight: 400; }
+.ct-filters__label { font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--lh-navy); }
+.ct-filters__select { min-width: 220px; height: 44px; padding: 0 12px; font: inherit; font-size: 16px; color: var(--lh-ink); background: var(--ct-white); border: 1px solid #c9b79f; border-radius: 6px; }
+.ct-filters__select:focus-visible { outline: 3px solid var(--lh-blue); outline-offset: 2px; }
+.ct-filters__status { margin: 0 0 12px; font-size: 15px; color: var(--lh-ink); }
+.ct-filters__none { margin: 20px 0 0; font-size: 16px; color: var(--lh-ink); }
+@media only screen and (max-width: 640px) {
+  .ct-filters__field, .ct-filters__select { width: 100%; min-width: 0; }
+}
