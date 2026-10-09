@@ -29,6 +29,7 @@ One file per working day, kept by Claude. The aim is a second brain: what got do
 | [2026-10-06](2026-10-06.md) | Merly's week plan (Learning this week, Growth next or end Oct, VisualCron LMS by end Oct). Learning home approved and published; test site became Learning's test site and a working prototype; one set of paste files; banner left to its owner; diary published to GitHub. |
 | [2026-10-07](2026-10-07.md) | learning.continuous.com live with the new design; OpCon Classic renames; OpCon Continuum topic; All courses grid with filters and pages; GitHub move kit for Learning. |
 | [2026-10-08](2026-10-08.md) | Growth back on the test site (footer, hero redesign); move kits; Roy moved Learning and VisualCron to the company GitHub; continuous2026 wiped and refilled; continuous-lms organisation deleted. OpCon Connector Simulator V2 started: BBE-style lesson pages, first lesson (Corelation Beginner L1) built. |
+| [2026-10-09](2026-10-09.md) | OpCon Connector Sim V2: both Corelation courses built in the BBE layout and created in Skilljar (not published). Growth in the Lighthouse look on the test site. Blocker: no access to the live Growth site, ever; Growth work from the back end only. |
 
 No entry means no work that day (27 Sept, 29 Sept and 4 Oct had no sessions).
 
