@@ -34,6 +34,7 @@ One file per working day, kept by Claude. The aim is a second brain: what got do
 | [2026-10-13](2026-10-13.md) | OpCon Connector Sim V2: FICS and IBM i Basic Beginner built; DNA, FICS and IBM i Basic Beginner into Skilljar (unpublished); EOD gets a course status table; Corelation Beginner narrated videos (1 to 3 in Skilljar), pronunciation list. Tuesday shift, Monday off. |
 | [2026-10-14](2026-10-14.md) | OpCon Connector Sim V2: Corelation Beginner Lesson 5 and Corelation Advanced videos (all 4).; DNA Beginner videos (all 5). |
 | [2026-10-15](2026-10-15.md) | OpCon Connector Sim V2: video timing fault found and fixed; all 14 videos re-rendered.; DNA Advanced videos (all 4).; DNA Advanced built and in Skilljar. |
+| [2026-10-16](2026-10-16.md) | OpCon Connector Sim V2: FICS Beginner videos (all 5). |
 
 No entry means no work that day (27 Sept, 29 Sept and 4 Oct had no sessions; 11 and 12 Oct had no sessions).
 
