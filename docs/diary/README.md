@@ -36,6 +36,7 @@ One file per working day, kept by Claude. The aim is a second brain: what got do
 | [2026-10-15](2026-10-15.md) | OpCon Connector Sim V2: video timing fault found and fixed; all 14 videos re-rendered.; DNA Advanced videos (all 4).; DNA Advanced built and in Skilljar. |
 | [2026-10-16](2026-10-16.md) | OpCon Connector Sim V2: FICS Beginner videos (all 5). |
 | [2026-10-19](2026-10-19.md) | OpCon Connector Sim V2: FICS Advanced videos (all 4). |
+| [2026-10-20](2026-10-20.md) | OpCon Connector Sim V2: FICS Advanced built and in Skilljar. |
 
 No entry means no work that day (27 Sept, 29 Sept and 4 Oct had no sessions; 11 and 12 Oct had no sessions).
 
