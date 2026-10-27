@@ -39,6 +39,9 @@ One file per working day, kept by Claude. The aim is a second brain: what got do
 | [2026-10-20](2026-10-20.md) | OpCon Connector Sim V2: FICS Advanced built and in Skilljar. |
 | [2026-10-21](2026-10-21.md) | OpCon Connector Sim V2: IBM i Basic Beginner videos (all 5). |
 | [2026-10-22](2026-10-22.md) | OpCon Connector Sim V2: lesson titles in title case across all 7 courses in Skilljar. |
+| [2026-10-23](2026-10-23.md) | OpCon Connector Sim V2: IBM i Advanced Beginner videos done. |
+| [2026-10-26](2026-10-26.md) | OpCon Connector Sim V2: MCP Beginner in Skilljar. |
+| [2026-10-27](2026-10-27.md) | OpCon Connector Sim V2: MCP Advanced in Skilljar. |
 
 No entry means no work that day (27 Sept, 29 Sept and 4 Oct had no sessions; 11 and 12 Oct had no sessions).
 
