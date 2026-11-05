@@ -5,6 +5,12 @@ Edit the originals in Documents\Diary, then run `perl tools/publish-docs.pl` in 
 
 - [README.md](diary/README.md)
 - [IDEAS.md](diary/IDEAS.md)
+- [2026-11-05.md](diary/2026-11-05.md)
+- [2026-11-04.md](diary/2026-11-04.md)
+- [2026-11-03.md](diary/2026-11-03.md)
+- [2026-11-02.md](diary/2026-11-02.md)
+- [2026-10-30.md](diary/2026-10-30.md)
+- [2026-10-29.md](diary/2026-10-29.md)
 - [2026-10-28.md](diary/2026-10-28.md)
 - [2026-10-27.md](diary/2026-10-27.md)
 - [2026-10-26.md](diary/2026-10-26.md)
