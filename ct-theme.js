@@ -84,8 +84,14 @@ window.ctLoadSettings = function () {
   });
   CT.roles.forEach(function (r) { r.courses = CT.fallback.role[r.key] || []; });
   window.CT = CT;
+  /* Extra menu links (a catalog page of its own, Roy, 10 Nov): topic key | link name | address.
+     Each sits under that topic in the Learning Catalogs menu, indented. */
+  var extra = rows('menu-links').filter(function (p) { return p[0] && p[1] && p[2]; });
   var nested = { 'All courses': { href: '/#all', target: '_self' } };
-  CT.topics.forEach(function (t) { nested[t.title] = { href: '/#subject-' + t.key, target: '_self' }; });
+  CT.topics.forEach(function (t) {
+    nested[t.title] = { href: '/#subject-' + t.key, target: '_self' };
+    extra.forEach(function (p) { if (p[0] === t.key) nested[p[1]] = { href: p[2], target: '_self', 'data-ct-child': '' }; });
+  });
   CT.formats.forEach(function (f) { if (f.menu) nested[f.title] = { href: '/#format-' + f.key, target: '_self' }; });
   window.CT_MENU = { 'Home': { href: '/', target: '_self' }, 'Learning Catalogs': { nestedLinks: nested } };
   return CT;
