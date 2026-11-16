@@ -45,3 +45,5 @@ Running list across all days. Newest at the top of each project. Status: open, b
 | Idea | From | Status | Notes |
 |---|---|---|---|
 | A daily work diary kept by Claude as a second brain | 2026-09-24 | building | This folder. |
+
+- 2026-11-17 Growth: settings into GitHub (built into ct-theme.js) and sections by tag, so new sections never touch a Skilljar box. Status: parked (Mark, "leave as is for now").
